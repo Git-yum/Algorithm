@@ -1,0 +1,26 @@
+//3个数由大到小快速排序，默认abc最大
+int max(int a,int b,int c){     
+    int max = a,mid = b,min = c,t = 0;
+    
+    if(max<mid){
+        t = max;
+        max = mid;
+        mid = t;
+    }
+    
+    if(mid<min){
+        t = mid;
+        mid = min;
+        min = t;
+        
+        if(mid>max){
+            t = max;
+            max = mid;
+            mid = t;
+        }
+    }
+    
+    t = max*100+mid*10+min;
+    
+    return t;
+}
