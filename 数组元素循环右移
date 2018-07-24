@@ -1,0 +1,53 @@
+#include <stdio.h>
+void r_move(int arr[],int nn,int mm);
+int gcd(int a,int b){       //最大公约数
+    int c = a%b;
+    while(c!=0){
+        a = b;
+        b = c;
+        c = a%b;
+    }
+    return b;
+}
+
+int main(void){
+    int n,m;
+    scanf("%d %d",&n,&m);
+    int a[n];
+    for(int i=0;i<n;i++){
+        scanf("%d",&a[i]);
+    }
+    
+    r_move(a,n,m);
+
+    for(int j=0;j<n;j++){
+        printf("%d",a[j]);
+        if(j!=n-1)
+            printf(" ");
+    }
+    printf("\n");
+    return 0;
+}
+
+void r_move(int arr[],int nn,int mm){
+    int end = arr[nn-1];    //备份数组最后一个数
+    mm = mm % nn;           //避免nn>mm,重复赋值
+    
+    if(mm!=0){
+        int cnt = gcd(nn,mm);   //循环次数或需要变量次数
+        int ccc = cnt,i = 1;
+        do{
+            int cn = nn/ccc;
+            for(int j=nn-i-mm;--cn!=0;j=j-mm){
+                arr[(j+mm)%nn] = arr[j];
+                if(j<mm)
+                    j = j + nn;     
+            }
+            arr[mm-i] = end;
+            i++;
+            cn = nn/ccc;
+            end = arr[nn-i]; 
+
+        }while(--cnt!=0);
+    }
+}
