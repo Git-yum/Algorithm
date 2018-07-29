@@ -1,0 +1,190 @@
+#include<time.h>
+#include<stdio.h>
+#include<stdlib.h>
+#define N 17
+int sum = 0;
+int num[4][4] ={2};
+
+void x(void){       //画横轴边框
+    for(int i=0;i<N;i++){
+        printf(" *");
+        if(i==N-1)
+            printf("\n");
+    }
+}
+void y(int a){      //画纵轴边框和2048
+    int i = 0;
+    for(;i<=N;i++){
+        if(i%4==0)
+        	printf(" *");
+        else
+        	printf("  ");
+    }
+    if(i==N+1){
+    	printf("\033[32m");		//前景色绿色
+        switch(a){
+            case 1:printf("  __\n");break;
+            case 2:printf("   _|\n");break;
+            case 3:printf("  |__\n");break;
+            case 5:printf("   _\n");break;
+            case 6:printf("  | |\n");break;
+            case 7:printf("  |_|\n");break;
+            case 9:printf("    \n");break;
+            case 10:printf("  |_|\n");break;
+            case 11:printf("    |\n");break;
+            case 13:printf("   _\n");break;
+            case 14:printf("  |_|\n");break;
+            case 15:printf("  |_|\n");break;
+            default:printf("\n");
+        }
+    }
+}
+
+void map_l(void){           //创建左面地图
+    for(int i=0;i<N;i++){
+    	printf("\033[31m");	//前景色（字体）为红色
+    	int a = i%4;
+    	if(a==0)
+    		x();
+    	else
+    		y(i);
+    }
+}
+
+void map_r(void){           //创建右面区域
+    printf("\033[u");       //恢复光标的位置
+    printf("\033[45C");     //光标右移45列
+    printf("\033[33m游戏说明：\n\033[45C");
+    printf("\033[37m2048是一款数字加法游戏,通过上\n\033[45C");
+    printf("下左右按键来使得所有行或所有列\n\033[45C");
+    printf("相同的数字相加，然后随机在空白\n\033[45C");
+    printf("位置出现1个数字2,重复上下左右\n\033[45C");
+    printf("使分值增加，直到所有空格都填满\n\033[45C");
+    printf("且无法再通过上下左右按键来清空\n\033[45C");
+    printf("任何一个格子,则游戏结束。\n\n\033[45C");
+    printf("\033[33m温馨提示：\n\033[45C");
+    printf("\033[37m按键关系-上:W;下:S;左:A;右:D;\n\n\033[45C");
+    printf("\033[33m您的分数:        [1.开始游戏]\n\033[45C");
+    printf("您的步数:        [2.重新开始]\n\033[45C");
+    printf("步均分数:        [3.还未开发]\n\n\033[45C");
+    printf("\033[37m W S A D:        [ ]选择1 2 3\033[11D");
+}
+
+void wasd(void){            //按键功能函数
+    char ch ='0';
+    int i,j,a,b,c,d,flag =1,cnt=3;
+    while(flag==1){
+        scanf("%c",&ch);
+        getchar();
+        printf("\033[1A \b\033[54C \b");   //光标上移一行，回到上次输入位置,并删除上次输入
+        while(cnt--!=0){        //对数组向某个方向移动，最多3次
+            for(i=0;i<4;i++){            
+                for(j=0;j<4;j++){
+                    switch(ch){
+                        case 'w':
+                        case 'W':a=j,b=i,c=b,d=a-1;flag = 0;break;
+                        case 'a':
+                        case 'A':a=i,b=j,c=b-1,d=a;flag = 0;break;
+                        case 's':
+                        case 'S':a=3-j,b=i,c=b,d=a+1;flag = 0;break;
+                        case 'd':
+                        case 'D':a=i,b=3-j,c=b+1,d=a;flag = 0;break;
+                        default:flag =1;
+                    }
+                    if(flag==1) break;
+                
+                    if((b==0&&(ch=='a'||ch=='A'))||(b==3&&(ch=='d'||ch=='D'))||
+                       (a==0&&(ch=='w'||ch=='W'))||(a==3&&(ch=='s'||ch=='S'))){
+                        //j = j + 1;      //正常应该这样，因为continue后会执行j++
+                        continue;         //但有些编译器不执行j++
+                    }
+                
+                    if(num[d][c]==0){
+                        num[d][c] = num[a][b];
+                        num[a][b] = 0;
+                    }
+                    else if(num[d][c] == num[a][b]){
+                        num[d][c] += num[a][b];
+                        num[a][b] = 0;
+                    }
+                        
+                }
+                if(flag==1) break;
+
+            }
+            if(flag==1){
+                cnt = 3;
+                break;
+            } 
+        }
+    }
+    printf("\033[54C \b");   
+}
+
+void rand_num(void){        //随机位置生成数字2
+    int sn[15],k=0;
+    for(int i=0;i<4;i++){
+        for(int j=0;j<4;j++){
+            if(num[i][j]==0){
+                sn[k++] = 4*i+j;
+            }
+        }
+    }
+    time_t t;
+    srand((unsigned) time(&t)); //以时间来生成一个随机种子
+    k = rand()%k;               //k取值0到k-1
+    num[sn[k]/4][sn[k]%4] = 2;
+}
+
+void data(void){
+    printf("\033[u");//恢复光标的位置
+    printf("\033[2B");//下移2行
+    rand_num();
+    for(int i=0;i<4;i++){
+        for(int j=0;j<4;j++){
+            sum += num[i][j];
+            if(num[i][j]==0) printf("\033[49m");
+            else if(num[i][j]<=4) printf("\033[40m");
+            else if(num[i][j]<=16) printf("\033[47m");
+            else if(num[i][j]<=64) printf("\033[46m");
+            else if(num[i][j]<=256) printf("\033[42m");
+            else if(num[i][j]<=1024) printf("\033[43m");
+            else if(num[i][j]<=4096) printf("\033[41m");
+            else if(num[i][j]<=16384) printf("\033[44m");
+            else if(num[i][j]<=65536) printf("\033[45m");
+            
+            if(num[i][j]==0) printf("\t\b\b\b\b\b     ");
+            else if(num[i][j]<10) printf("\t\b\b\b\b\b  %d  ",num[i][j]);
+            else if(num[i][j]<100) printf("\t\b\b\b\b\b %d %d ",num[i][j]/10,num[i][j]%10);
+            else if(num[i][j]<1000) printf("\t\b\b\b\b\b %d ",num[i][j]);
+            else if(num[i][j]<10000) printf("\t\b\b\b\b\b%d %d",num[i][j]/100,num[i][j]%100);
+            else if(num[i][j]<100000) printf("\t\b\b\b\b\b%d",num[i][j]);
+            if(j==3)
+                printf("\033[49m\n\033[3B");     
+        }
+    }
+    printf("\r\033[6A\033[54C \b");
+    printf("%d",sum);
+    printf("\r\033[4B\033[54C \b");
+    sum = 0;
+}
+
+int main(void){
+	printf("\033[s");//保存光标的位置
+    map_l();
+    map_r();
+    int a = 0;
+    do{
+        scanf("%d",&a);
+        printf("\033[1A\033[63C \b");//a为1位数有效
+        if(a==1||a==2)
+            printf("%d",a);     
+    }while(a!=1&&a!=2);
+    getchar();
+    data();
+    while(sum!=2048){
+        wasd();
+        data();
+    }  
+    return 0;
+}
