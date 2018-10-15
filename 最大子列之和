@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+    int k,max = 0,sum = 0;
+    scanf("%d",&k);
+    int arr[k];
+    while(k){
+        scanf("%d",&arr[--k]);
+        sum += arr[k];
+        if(sum > max){
+            max = sum;
+        }
+        else if(sum < 0){
+            sum = 0;
+        }
+    }
+    printf("%d\n",max);
+    
+    return 0;
+}
