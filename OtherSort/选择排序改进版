@@ -1,0 +1,40 @@
+package com.gze.sort;
+
+/**
+ * 基础的排序算法：选择排序、插入排序、冒泡排序
+ */
+public class BasicSort {
+    //单例模式：成员变量
+    private static BasicSort instance = new BasicSort();
+    //单例模式：成员方法
+    private BasicSort(){}
+    //单例模式：实例(get)方法
+    public static BasicSort getInstance() {
+        return instance;
+    }
+
+    /**
+     * 选择排序改进版，减少交换次数
+     * 两个元素交换需要三次赋值，假设需要交换K次，即3*K次赋值；
+     * 本方法记录索引并更新最小值，只需2*K次加最后2次赋值，即2*K+2次
+     * @param array 待排序的整数数组
+     */
+    public void selectionSort(int[] array){
+        int min,minIndex;
+        int len = array.length;
+        if (len > 1){
+            for (int i = 1;i < len;i++){
+                minIndex = i - 1;
+                min = array[minIndex];
+                for (int j = i;j < len;j++){
+                    if (min > array[j]){
+                        min = array[j];
+                        minIndex = j;
+                    }
+                }
+                array[minIndex] = array[i - 1];
+                array[i - 1] = min;
+            }
+        }
+    }
+}
