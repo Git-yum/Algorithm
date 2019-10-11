@@ -1,0 +1,43 @@
+package com.gze.sort;
+
+public class Num {
+    boolean isNumber(Object o){
+        boolean flag = false;
+        if (o instanceof Byte || o instanceof Short || o instanceof Integer || o instanceof Long
+        || o instanceof Float || o instanceof Double){
+            flag = true;
+        }
+        return flag;
+    }
+
+    Class<?> getClass(Object o){
+        if (isNumber(o)){
+            if (o instanceof Byte){
+                return Byte.class;
+            }else if (o instanceof Short){
+                return Short.class;
+            }else if (o instanceof Integer){
+                return Integer.class;
+            }else if (o instanceof Long){
+                return Long.class;
+            }else if (o instanceof Float){
+                return Float.class;
+            }else if (o instanceof Double){
+                return Double.class;
+            }
+        }
+        return Object.class;
+    }
+
+}
+
+class Sort extends Num{
+    private static Num sort = new Sort();
+    public static void main(String[] args) {
+//        Object object = Integer.valueOf(0);
+        Object object = Double.valueOf(0d);
+        if (sort.isNumber(object)){
+            System.out.println(sort.getClass(object));
+        }
+    }
+}
