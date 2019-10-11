@@ -1,0 +1,49 @@
+package com.gze.sort;
+
+/**
+ * 归并排序
+ */
+public class MergeSort {
+
+    /**
+     * 原地归并排序:从上到下
+     * @param array 待排序的数组
+     */
+    public void sort(int[] array){
+        if (array.length > 1){
+            sort(array,0,array.length - 1);
+        }
+    }
+
+    /**
+     * 归并排序的具体方法
+     * @param array 待排序的数组
+     * @param left  左（小）索引
+     * @param right 右（大）索引
+     */
+    private void sort(int[] array,int left,int right){
+        //左右索引差值的一半
+        int indexLen = (right - left) / 2;
+        //分割后右侧数组的首索引
+        int rightIndex = left + indexLen + 1;
+        //分割数组：元素个数大于等于3时
+        if (indexLen > 0){
+            sort(array,left,rightIndex - 1);
+            sort(array,rightIndex,right);
+        }
+        //合并数组：原地合并，使用插入排序
+        for (int j = rightIndex;j <= right;j++){
+            int i = j - 1;
+            int temp = array[j];
+            for (;i >= left && temp < array[i];i--){
+                array[i + 1] = array[i];
+            }
+            array[i + 1] = temp;
+        }
+        //查看输出是否正确
+        for (int k = left;k <= right;k++){
+            System.out.print(array[k]);
+        }
+        System.out.println();
+    }
+}
