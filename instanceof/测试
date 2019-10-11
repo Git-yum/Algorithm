@@ -1,0 +1,55 @@
+package com.gze.sort;
+//结论：子类一定是父类的实例，父类不一定是子类的实例，只可能是相关子类（子类创建的父类对象）的实例
+import org.w3c.dom.ls.LSOutput;
+
+public class Person {
+    public static void main(String[] args) {
+//        Person person = new Person();
+//        System.out.println(person instanceof Person);
+//        System.out.println(person instanceof Male);
+//        System.out.println(person instanceof Female);
+//        System.out.println("-----------------------");
+//        Person person1 = new Male();
+//        System.out.println(person1 instanceof Person);
+//        System.out.println(person1 instanceof Male);
+//        System.out.println(person1 instanceof Female);
+//        System.out.println("-----------------------");
+//        Person person2 = new Female();
+//        System.out.println(person2 instanceof Person);
+//        System.out.println(person2 instanceof Male);
+//        System.out.println(person2 instanceof Female);
+//        System.out.println("-----------------------");
+//        Male male = new Male();
+//        System.out.println(male instanceof Person);
+//        System.out.println(male instanceof Male);
+//        System.out.println("-----------------------");
+//        Female female = new Female();
+//        System.out.println(female instanceof Person);
+//        System.out.println(female instanceof Female);
+//        System.out.println("-----------------------");
+
+        Object object = new Object();
+        System.out.println(object instanceof Object);
+        System.out.println(object instanceof Integer);
+        System.out.println(object instanceof Double);
+        System.out.println("-----------------------");
+        Object object1 = Integer.valueOf(1);
+        System.out.println(object1 instanceof Object);
+        System.out.println(object1 instanceof Integer);
+        System.out.println(object1 instanceof Double);
+        System.out.println("-----------------------");
+        Object object2 = Double.valueOf(1.1d);
+        System.out.println(object2 instanceof Object);
+        System.out.println(object2 instanceof Integer);
+        System.out.println(object2 instanceof Double);
+        System.out.println("-----------------------");
+    }
+}
+
+class Male extends Person{
+
+}
+
+class Female extends Person{
+
+}
